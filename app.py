@@ -1,7 +1,15 @@
 from flask import Flask, render_template, request, jsonify
+from dotenv import load_dotenv
 import aisuite
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
+
+# Now you can access the environment variables using os.getenv
+# app_name = os.getenv('APP_NAME')
+# region = os.getenv('REGION')
 
 @app.route('/')
 def index():
