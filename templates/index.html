@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Comparator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+            transition: box-shadow 0.3s ease;
+        }
+        textarea:focus {
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .character-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+        }
+        .clear-button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #999;
+        }
+        .clear-button:hover {
+            color: #333;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            transition: box-shadow 0.3s ease;
+        }
+        select:focus {
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .response-box {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+        .response-box:focus {
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+        .copy-button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #999;
+        }
+        .copy-button:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-group">
+            <label for="prompt">Enter your prompt here <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Provide a prompt for the LLMs to process.</span></span></label>
+            <textarea id="prompt" placeholder="Type your prompt here..."></textarea>
+            <button class="clear-button" onclick="clearPrompt()"><i class="fas fa-times"></i></button>
+            <div class="character-counter" id="characterCounter">0/500</div>
+        </div>
+        <div class="form-group">
+            <label for="llm1">Select LLM 1</label>
+            <select id="llm1">
+                <option value="" disabled selected>Select an LLM</option>
+                <option value="llm1">LLM 1</option>
+                <option value="llm2">LLM 2</option>
+                <option value="llm3">LLM 3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="llm2">Select LLM 2</label>
+            <select id="llm2">
+                <option value="" disabled selected>Select an LLM</option>
+                <option value="llm1">LLM 1</option>
+                <option value="llm2">LLM 2</option>
+                <option value="llm3">LLM 3</option>
+            </select>
+        </div>
+        <button onclick="sendPrompt()">Send to LLMs</button>
+        <div class="form-group">
+            <label for="response1">Response from LLM 1</label>
+            <div class="response-box" id="response1" tabindex="0"></div>
+            <button class="copy-button" onclick="copyResponse('response1')"><i class="fas fa-copy"></i></button>
+        </div>
+        <div class="form-group">
+            <label for="response2">Response from LLM 2</label>
+            <div class="response-box" id="response2" tabindex="0"></div>
+            <button class="copy-button" onclick="copyResponse('response2')"><i class="fas fa-copy"></i></button>
+        </div>
+    </div>
+    <script>
+        const promptTextarea = document.getElementById('prompt');
+        const characterCounter = document.getElementById('characterCounter');
+
+        promptTextarea.addEventListener('input', () => {
+            const currentLength = promptTextarea.value.length;
+            characterCounter.textContent = `${currentLength}/500`;
+        });
+
+        function clearPrompt() {
+            promptTextarea.value = '';
+            characterCounter.textContent = '0/500';
+        }
+
+        function sendPrompt() {
+            const prompt = document.getElementById('prompt').value;
+            const llm1 = document.getElementById('llm1').value;
+            const llm2 = document.getElementById('llm2').value;
+
+            if (!prompt) {
+                alert('Please enter a prompt.');
+                return;
+            }
+
+            if (!llm1 || !llm2) {
+                alert('Please select both LLMs.');
+                return;
+            }
+
+            fetch('/api/send_prompt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt, llm1, llm2 })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response1').textContent = data.response1;
+                document.getElementById('response2').textContent = data.response2;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            });
+        }
+
+        function copyResponse(responseId) {
+            const responseBox = document.getElementById(responseId);
+            const text = responseBox.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Response copied to clipboard.');
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
