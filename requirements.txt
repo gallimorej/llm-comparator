@@ -1,3 +1,5 @@
 Flask
 python-dotenv
 aisuite
+aisuite[openai]
+aisuite[anthropic]
