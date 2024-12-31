@@ -20,12 +20,21 @@ function populateSelectBoxes(config) {
     }
 }
 
+function updateCharacterCount() {
+    const prompt = document.getElementById('prompt');
+    const characterCounter = document.getElementById('characterCounter');
+    characterCounter.innerText = `${prompt.value.length}/500`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded. Populating select boxes...');
     fetch('/static/config.json')
         .then(response => response.json())
         .then(config => populateSelectBoxes(config))
         .catch(error => console.error('Error loading config:', error));
+
+    // Add event listener to update character count
+    const prompt = document.getElementById('prompt');
+    prompt.addEventListener('input', updateCharacterCount);
 });
 
 function sendPrompt() {
@@ -58,6 +67,7 @@ function sendPrompt() {
 function clearPrompt() {
     document.getElementById('prompt').value = '';
     document.getElementById('characterCounter').innerText = '0/500';
+    updateCharacterCount();
 }
 
 function copyToClipboard(elementId) {
