@@ -42,6 +42,24 @@ function sendPrompt() {
     const llm1 = document.getElementById('llm1').value;
     const llm2 = document.getElementById('llm2').value;
 
+    if (!prompt.trim()) {
+        alert('Please enter a prompt.');
+        document.getElementById('prompt').focus(); // Set focus to the prompt textarea
+        return;
+    }
+    
+    if (!llm1) {
+        alert('Please select LLM 1.');
+        document.getElementById('llm1').focus(); // Set focus to the LLM 1 select box
+        return;
+    }
+
+    if (!llm2) {
+        alert('Please select LLM 2.');
+        document.getElementById('llm2').focus(); // Set focus to the LLM 2 select box
+        return;
+    }
+
     fetch('/api/send_prompt', {
         method: 'POST',
         headers: {
