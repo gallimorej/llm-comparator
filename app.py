@@ -36,4 +36,5 @@ def send_prompt():
     return jsonify({'response1': response1.choices[0].message.content, 'response2': response2.choices[0].message.content})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 3000))
+    app.run(host='0.0.0.0', port=port)

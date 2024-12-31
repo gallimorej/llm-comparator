@@ -23,7 +23,7 @@
     ```sh
     DOCKER_IMAGE=your_docker_image_name
     DOCKER_CONTAINER=your_docker_container_name
-    LOCAL_PORT=your_local_port_number
+    PORT=your_port_number
     PROJECT_ID=your_google_cloud_project_id
     APP_NAME=your_app_name
     REGION=your_google_cloud_region
