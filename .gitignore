@@ -169,3 +169,6 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Google key
+gen-lang-client-0765726668-c4d842188ce5.json

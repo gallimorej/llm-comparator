@@ -3,3 +3,5 @@ python-dotenv
 aisuite
 aisuite[openai]
 aisuite[anthropic]
+aisuite[google]
+vertexai

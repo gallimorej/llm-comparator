@@ -14,6 +14,9 @@ check-env:
 	@if [ -z "$(OPENAI_API_KEY)" ]; then echo "OPENAI_API_KEY is not set"; exit 1; fi
 	@if [ -z "$(ANTHROPIC_API_KEY)" ]; then echo "ANTHROPIC_API_KEY is not set"; exit 1; fi
 	@if [ -z "$(SERVICE_ACCOUNT)" ]; then echo "SERVICE_ACCOUNT is not set"; exit 1; fi
+	@if [ -z "$(GOOGLE_PROJECT_ID)" ]; then echo "GOOGLE_PROJECT_ID is not set"; exit 1; fi
+	@if [ -z "$(GOOGLE_REGION)" ]; then echo "GOOGLE_REGION is not set"; exit 1; fi
+	@if [ -z "$(GOOGLE_APPLICATION_CREDENTIALS)" ]; then echo "GOOGLE_APPLICATION_CREDENTIALS is not set"; exit 1; fi
 
 # Variables
 # NODE_MODULES_DIR = node_modules
