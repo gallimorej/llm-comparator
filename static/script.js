@@ -11,7 +11,7 @@ function populateSelectBoxes(config) {
         config.providers[provider].forEach(model => {
             const option = document.createElement('option');
             option.value = `${provider.toLowerCase()}:${model}`;
-            option.textContent = `${provider}: ${model}`;
+            option.textContent = option.value
             optgroup.appendChild(option);
         });
 
@@ -59,6 +59,10 @@ function sendPrompt() {
         document.getElementById('llm2').focus(); // Set focus to the LLM 2 select box
         return;
     }
+
+    // Update the label for response1
+    document.getElementById('response1-label').textContent = llm1;
+    document.getElementById('response2-label').textContent = llm2;
 
     fetch('/api/send_prompt', {
         method: 'POST',

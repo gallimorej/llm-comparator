@@ -31,13 +31,15 @@
         <button onclick="sendPrompt()">Send to LLMs</button>
         <div class="results-container">
             <div>
-                <label for="response1">Response from LLM 1</label>
+                <label for="response1">LLM 1 Response</label>
+                <label id="response1-label">(LLM 1)</label>
                 <div class="response-box" id="response1" tabindex="0"></div>
                 <input type="hidden" id="mdResponse1">
                 <span class="copy-button" onclick="copyToClipboard('mdResponse1')"><i class="fas fa-copy"></i></span>
             </div>
             <div>
-                <label for="response2">Response from LLM 2</label>
+                <label for="response2">LLM 2 Response</label>
+                <label id="response2-label">(LLM 2)</label>
                 <div class="response-box" id="response2" tabindex="0"></div>
                 <input type="hidden" id="mdResponse2">
                 <span class="copy-button" onclick="copyToClipboard('mdResponse2')"><i class="fas fa-copy"></i></span>
