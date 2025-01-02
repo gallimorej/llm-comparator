@@ -17,6 +17,12 @@
     margin-bottom: 20px;
 }
 
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
 .results-container {
     display: flex;
     justify-content: space-between;

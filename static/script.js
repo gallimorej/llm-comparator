@@ -23,7 +23,7 @@ function populateSelectBoxes(config) {
 function updateCharacterCount() {
     const prompt = document.getElementById('prompt');
     const characterCounter = document.getElementById('characterCounter');
-    characterCounter.innerText = `${prompt.value.length}/500`;
+    characterCounter.innerText = `${prompt.value.length}/524288`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -90,6 +90,26 @@ function clearPrompt() {
     document.getElementById('prompt').value = '';
     document.getElementById('characterCounter').innerText = '0/500';
     updateCharacterCount();
+}
+
+function improvePrompt() {
+    const prompt = document.getElementById('prompt').value;
+
+    fetch('/api/improve_prompt', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('prompt').value = data.improved_prompt;
+        updateCharacterCount();
+    })
+    .catch(error => {
+        console.error('Error improving prompt:', error);
+    });
 }
 
 function copyToClipboard(elementId) {

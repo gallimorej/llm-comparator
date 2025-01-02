@@ -5,3 +5,4 @@ aisuite[openai]
 aisuite[anthropic]
 aisuite[google]
 vertexai
+requests

@@ -13,8 +13,11 @@
         <div class="form-group">
             <label for="prompt">Enter your prompt here <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">Provide a prompt for the LLMs to process.</span></span></label>
             <textarea id="prompt" placeholder="Type your prompt here..."></textarea>
-            <button onclick="clearPrompt()">Clear Prompt</button>
-            <div class="character-counter" id="characterCounter">0/500</div>
+            <div class="button-container"> 
+                <button onclick="clearPrompt()">Clear Prompt</button>
+                <button onclick="improvePrompt()">Improve Prompt</button>
+            </div>
+            <div class="character-counter" id="characterCounter">0/524288</div>
         </div>
         <div class="form-group">
             <label for="llm1">Select LLM 1</label>

@@ -3,5 +3,6 @@
         "OpenAI": ["gpt-4o", "chatgpt-4o-latest", "gpt-4o-mini"],
         "Anthropic": ["claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"],
         "Google": ["gemini-1.5-pro", "gemini-1.5-flash"]
-    }
+    },
+    "improvePromptRecipeURL": "https://raw.githubusercontent.com/danielmiessler/fabric/refs/heads/main/patterns/improve_prompt/system.md"
 }
