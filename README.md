@@ -1,5 +1,7 @@
 # llm-comparator
 
+TODO: I need to update all of this. It's GitHub Copilot-generated.
+
 ## Setup and Run the App Locally
 
 1. Clone the repository:
