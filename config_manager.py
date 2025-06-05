@@ -37,6 +37,8 @@ class ConfigManager:
     def refresh_config(self):
         """Manually refresh the config from GCS"""
         try:
+            # Get a fresh blob reference without generation
+            self.blob = self.bucket.blob('config.json')
             config_data = self.blob.download_as_string()
             self.config = json.loads(config_data)
             return True, "Config refreshed successfully"
