@@ -6,3 +6,4 @@ aisuite[anthropic]
 aisuite[google]
 vertexai
 requests
+google-cloud-storage

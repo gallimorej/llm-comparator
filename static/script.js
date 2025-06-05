@@ -4,6 +4,10 @@ function populateSelectBoxes(config) {
     const llm1Select = document.getElementById('llm1');
     const llm2Select = document.getElementById('llm2');
 
+    // Clear existing options
+    llm1Select.innerHTML = '<option value="" disabled selected>Select an LLM</option>';
+    llm2Select.innerHTML = '<option value="" disabled selected>Select an LLM</option>';
+
     for (const provider in config.providers) {
         const optgroup = document.createElement('optgroup');
         optgroup.label = provider;
@@ -11,7 +15,7 @@ function populateSelectBoxes(config) {
         config.providers[provider].forEach(model => {
             const option = document.createElement('option');
             option.value = `${provider.toLowerCase()}:${model}`;
-            option.textContent = option.value
+            option.textContent = option.value;
             optgroup.appendChild(option);
         });
 
@@ -26,15 +30,54 @@ function updateCharacterCount() {
     characterCounter.innerText = `${prompt.value.length}/524288`;
 }
 
+async function refreshConfig() {
+    try {
+        const response = await fetch('/api/refresh_config', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            // After successful refresh, get the new config
+            const configResponse = await fetch('/api/get_config');
+            const config = await configResponse.json();
+            populateSelectBoxes(config);
+            alert('Config refreshed successfully');
+        } else {
+            alert('Failed to refresh config: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error refreshing config:', error);
+        alert('Error refreshing config. See console for details.');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/static/config.json')
+    // Initial config load
+    fetch('/api/get_config')
         .then(response => response.json())
         .then(config => populateSelectBoxes(config))
-        .catch(error => console.error('Error loading config:', error));
+        .catch(error => {
+            console.error('Error loading config:', error);
+            alert('Error loading config. See console for details.');
+        });
 
     // Add event listener to update character count
     const prompt = document.getElementById('prompt');
     prompt.addEventListener('input', updateCharacterCount);
+
+    // Add refresh config button if it doesn't exist
+    if (!document.getElementById('refreshConfigBtn')) {
+        const buttonContainer = document.querySelector('.button-container');
+        const refreshButton = document.createElement('button');
+        refreshButton.id = 'refreshConfigBtn';
+        refreshButton.onclick = refreshConfig;
+        refreshButton.textContent = 'Refresh Config';
+        buttonContainer.appendChild(refreshButton);
+    }
 });
 
 function sendPrompt() {

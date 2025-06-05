@@ -4,18 +4,18 @@ import aisuite
 import os
 import json
 import requests
+from config_manager import ConfigManager
 
 load_dotenv()
 
 app = Flask(__name__)
 
-# Load the config.json file
-with open('static/config.json') as config_file:
-    config = json.load(config_file)
-
-# Now you can access the environment variables using os.getenv
-# app_name = os.getenv('APP_NAME')
-# region = os.getenv('REGION')
+# Initialize the config manager
+try:
+    config_manager = ConfigManager()
+except ValueError as e:
+    print(f"Error initializing config manager: {e}")
+    raise
 
 # Initialize the AI client for accessing the language model
 client = aisuite.Client()
@@ -23,6 +23,26 @@ client = aisuite.Client()
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/api/refresh_config', methods=['POST'])
+def refresh_config():
+    """Endpoint to manually refresh the config"""
+    success, message = config_manager.refresh_config()
+    return jsonify({
+        'success': success,
+        'message': message
+    })
+
+@app.route('/api/get_config')
+def get_config():
+    """Endpoint to get current config"""
+    try:
+        return jsonify(config_manager.get_config())
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        }), 500
 
 @app.route('/api/send_prompt', methods=['POST'])
 def send_prompt():
@@ -46,8 +66,12 @@ def improve_prompt():
     data = request.json
     prompt = data.get('prompt')
     
+    # Get the improvePromptRecipeURL from the config
+    config = config_manager.get_config()
+    recipe_url = config.get('improvePromptRecipeURL')
+    
     # Fetch the content from the improvePromptRecipeURL
-    response = requests.get(config['improvePromptRecipeURL'])
+    response = requests.get(recipe_url)
     if response.status_code == 200:
         improved_prompt = response.text + prompt
     else:

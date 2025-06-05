@@ -54,7 +54,7 @@ build-cloud: check-env
 # Deploy to Google Cloud Run
 .PHONY: deploy-cloud
 deploy-cloud: build-cloud
-	gcloud run deploy $(APP_NAME) --image gcr.io/$(PROJECT_ID)/$(APP_NAME) --platform managed --region $(REGION) --allow-unauthenticated --port $(PORT)
+	gcloud run deploy $(APP_NAME) --image gcr.io/$(PROJECT_ID)/$(APP_NAME) --platform managed --region $(REGION) --allow-unauthenticated --port $(PORT) --set-env-vars="CONFIG_BUCKET_NAME=llm-comparator-config-446404,ANTHROPIC_API_KEY=$(ANTHROPIC_API_KEY),OPENAI_API_KEY=$(OPENAI_API_KEY),GOOGLE_PROJECT_ID=llm-comparator-446404,GOOGLE_REGION=us-central1"
 
 # Retrieve the service URL
 .PHONY: get-url

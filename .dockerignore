@@ -1,0 +1,36 @@
+# Environment files
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Service account keys
+*.json
+!package.json
+!package-lock.json
+!gen-lang-client-0765726668-c4d842188ce5.json
+
+# Git files
+.git
+.gitignore
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Local development files
+.DS_Store
+Thumbs.db 

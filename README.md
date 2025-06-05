@@ -33,6 +33,7 @@ TODO: I need to update all of this. It's GitHub Copilot-generated.
     REACT_APP_ANTHROPIC_API_KEY=your_anthropic_api_key
     SERVICE_ACCOUNT=your_google_cloud_service_account
     SLACK_TOKEN=your_slack_token (if applicable)
+    CONFIG_BUCKET_NAME=your_google_cloud_storage_bucket_name  # Name of the GCS bucket where config.json is stored
     ```
 
 5. Run the Flask app:

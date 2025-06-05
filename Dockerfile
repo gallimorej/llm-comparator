@@ -10,6 +10,9 @@ COPY requirements.txt requirements.txt
 # Install the dependencies
 RUN pip install -r requirements.txt
 
+# Copy the service account key file first
+COPY gen-lang-client-0765726668-c4d842188ce5.json /app/
+
 # Copy the rest of the application code into the container
 COPY . .
 
