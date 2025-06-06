@@ -54,15 +54,15 @@ build-cloud: check-env
 # Deploy to Google Cloud Run
 .PHONY: deploy-cloud
 deploy-cloud: build-cloud
-	gcloud run deploy $(APP_NAME) --image gcr.io/$(PROJECT_ID)/$(APP_NAME) --platform managed --region $(REGION) --allow-unauthenticated --port $(PORT) --set-env-vars="CONFIG_BUCKET_NAME=llm-comparator-config-446404,ANTHROPIC_API_KEY=$(ANTHROPIC_API_KEY),OPENAI_API_KEY=$(OPENAI_API_KEY),GOOGLE_PROJECT_ID=llm-comparator-446404,GOOGLE_REGION=us-central1"
+	gcloud run deploy $(APP_NAME) --image gcr.io/$(PROJECT_ID)/$(APP_NAME) --platform managed --region $(REGION) --allow-unauthenticated --port $(PORT) --set-env-vars="PROJECT_ID=$(PROJECT_ID),SERVICE_ACCOUNT=$(SERVICE_ACCOUNT),CONFIG_BUCKET_NAME=$(CONFIG_BUCKET_NAME),ANTHROPIC_API_KEY=$(ANTHROPIC_API_KEY),OPENAI_API_KEY=$(OPENAI_API_KEY),GOOGLE_PROJECT_ID=$(GOOGLE_PROJECT_ID),GOOGLE_REGION=$(GOOGLE_REGION),GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS)"
+
+# Clean up local Docker images
+.PHONY: clean-cloud
+clean-cloud:
+	docker rmi gcr.io/$(PROJECT_ID)/$(APP_NAME)
 
 # Retrieve the service URL
 .PHONY: get-url
 get-url:
 	@echo "Service URL:"
 	@gcloud run services describe $(APP_NAME) --platform managed --region $(REGION) --format "value(status.url)"
-
-# Clean up local Docker images
-.PHONY: clean-cloud
-clean-cloud:
-	docker rmi gcr.io/$(PROJECT_ID)/$(APP_NAME)

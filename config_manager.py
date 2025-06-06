@@ -1,30 +1,36 @@
+from google.auth import compute_engine
 from google.cloud import storage
 import json
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ConfigManager:
     def __init__(self):
         self.config = None
+
+        logger.info(f"Setting up config manager")
         
-        # Only require GOOGLE_APPLICATION_CREDENTIALS locally
-        if os.getenv('K_SERVICE'):
-            required_vars = ['GOOGLE_PROJECT_ID', 'GOOGLE_REGION']
-        else:
-            required_vars = ['GOOGLE_PROJECT_ID', 'GOOGLE_REGION', 'GOOGLE_APPLICATION_CREDENTIALS']
+        # Check for required project variables
+        required_vars = ['GOOGLE_PROJECT_ID', 'GOOGLE_REGION', 'GOOGLE_APPLICATION_CREDENTIALS']
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
-            raise OSError(f"Missing one or more required Google environment variables: {', '.join(missing_vars)}. Please refer to the setup guide: /guides/google.md")
+            raise OSError(f"Missing one or more required Google environment variables: {', '.join(missing_vars)}")
         
-        # Initialize the storage client
-        if os.getenv('K_SERVICE'):  # K_SERVICE is set when running on Cloud Run
-            # Use the default credentials (Cloud Run service account)
-            self.storage_client = storage.Client(project=os.getenv('GOOGLE_PROJECT_ID'))
-        else:
-            # For local development, use the service account key file
-            credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-            if not credentials_path:
-                raise ValueError("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set")
-            self.storage_client = storage.Client.from_service_account_json(credentials_path)
+        # Get credentials for a specific service account
+        credentials = compute_engine.Credentials(
+            service_account_email=os.getenv('SERVICE_ACCOUNT')
+        )
+
+        # Initialize client with these credentials
+        logger.info(f"Initializing storage client for project: {os.getenv('PROJECT_ID')}")
+        self.storage_client = storage.Client(
+            project=os.getenv('PROJECT_ID'),
+            credentials=credentials
+        )
         
         self.bucket_name = os.getenv('CONFIG_BUCKET_NAME')
         if not self.bucket_name:

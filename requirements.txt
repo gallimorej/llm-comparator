@@ -7,3 +7,4 @@ aisuite[google]
 vertexai
 requests
 google-cloud-storage
+google-auth
