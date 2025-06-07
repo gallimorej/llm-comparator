@@ -1,8 +1,8 @@
 {
     "providers": {
-        "OpenAI": ["gpt-4.1-2025-04-14", "gpt-4o", "chatgpt-4o-latest", "gpt-4o-mini"],
-        "Anthropic": ["claude-opus-4-20250514","claude-sonnet-4-20250514", "claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"],
-        "Google": ["gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash"]
+        "OpenAI": ["o3-2025-04-16", "o4-mini-2025-04-16", "gpt-4.1-2025-04-14", "o1-pro-2025-03-19", "gpt-4o", "chatgpt-4o-latest", "gpt-4o-mini"],
+        "Anthropic": ["claude-opus-4-20250514","claude-sonnet-4-20250514", "claude-3-7-sonnet-20250219", "claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"],
+        "Google": ["gemini-2.5-pro-preview-06-05", "gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash"]
     },
     "improvePromptRecipeURL": "https://raw.githubusercontent.com/danielmiessler/fabric/refs/heads/main/patterns/improve_prompt/system.md"
 }
