@@ -66,3 +66,14 @@ clean-cloud:
 get-url:
 	@echo "Service URL:"
 	@gcloud run services describe $(APP_NAME) --platform managed --region $(REGION) --format "value(status.url)"
+
+# Update the config in Google Cloud Storage
+.PHONY: update-config
+update-config: check-env
+	@if [ ! -f "static/config.json" ]; then \
+		echo "Error: static/config.json not found"; \
+		exit 1; \
+	fi
+	@echo "Uploading config.json to gs://$(CONFIG_BUCKET_NAME)/config.json..."
+	@gsutil cp static/config.json gs://$(CONFIG_BUCKET_NAME)/config.json
+	@echo "Config updated successfully"

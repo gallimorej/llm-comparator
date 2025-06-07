@@ -1,6 +1,6 @@
 {
     "providers": {
-        "OpenAI": ["gpt-4o", "chatgpt-4o-latest", "gpt-4o-mini"],
+        "OpenAI": ["gpt-4.1-2025-04-14", "gpt-4o", "chatgpt-4o-latest", "gpt-4o-mini"],
         "Anthropic": ["claude-opus-4-20250514","claude-sonnet-4-20250514", "claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"],
         "Google": ["gemini-1.5-pro", "gemini-1.5-flash"]
     },
