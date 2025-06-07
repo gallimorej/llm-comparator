@@ -61,11 +61,14 @@ deploy-cloud: build-cloud
 clean-cloud:
 	docker rmi gcr.io/$(PROJECT_ID)/$(APP_NAME)
 
+# Get the service URL
+APP_URL := $(shell gcloud run services describe $(APP_NAME) --platform managed --region $(REGION) --format "value(status.url)")
+
 # Retrieve the service URL
 .PHONY: get-url
 get-url:
 	@echo "Service URL:"
-	@gcloud run services describe $(APP_NAME) --platform managed --region $(REGION) --format "value(status.url)"
+	@echo "$(APP_URL)"
 
 # Update the config in Google Cloud Storage
 .PHONY: update-config
@@ -76,4 +79,6 @@ update-config: check-env
 	fi
 	@echo "Uploading config.json to gs://$(CONFIG_BUCKET_NAME)/config.json..."
 	@gsutil cp static/config.json gs://$(CONFIG_BUCKET_NAME)/config.json
-	@echo "Config updated successfully"
+	@echo "Config uploaded successfully"
+	@echo "Refreshing config in the application..."
+	@curl -s -X POST $(APP_URL)/api/refresh_config | grep -q '"success":true' && echo "Config refreshed successfully" || (echo "Failed to refresh config" && exit 1)
